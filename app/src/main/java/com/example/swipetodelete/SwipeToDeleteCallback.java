@@ -18,11 +18,12 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private MyAdapter mAdapter;
     private final ColorDrawable background;
 
+
     public SwipeToDeleteCallback(MyAdapter adapter) {
         super(0,ItemTouchHelper.LEFT );
         mAdapter = adapter;
-        icon = ContextCompat.getDrawable(mAdapter.context, R.drawable.ic_trash);
-        background  = new ColorDrawable(Color.RED);
+        icon = ContextCompat.getDrawable(mAdapter.context, R.drawable.background_icon);
+        background  = new ColorDrawable(Color.WHITE);
 
     }
 
