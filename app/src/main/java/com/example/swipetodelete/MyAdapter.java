@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -17,9 +18,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Message mRecentlyDeletedItem;
     private int mRecentlyDeletedItemPosition;
 
-    public MyAdapter(Context ctx, List<Message> list){
+    public MyAdapter(Context ctx, List<Message> messages){
         this.context = ctx;
-        this.messageList = list;
+        this.messageList = messages;
     }
     @NonNull
     @Override
@@ -38,6 +39,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return messageList.size();
     }
 
+
+
     public void deleteItem(int position){
         mRecentlyDeletedItem = messageList.get(position);
         mRecentlyDeletedItemPosition = position;
@@ -53,7 +56,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv = itemView.findViewById(R.id.textView);
+            tv = itemView.findViewById(R.id.message);
         }
     }
 }

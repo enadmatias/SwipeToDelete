@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private  MyAdapter mAdapter;
     private   Message message;
     private DividerItemDecoration itemDecor;
+    private RecyclerTouchListener touchListener;
+
 
 
     @Override
@@ -34,15 +39,29 @@ public class MainActivity extends AppCompatActivity {
         setUpRecyclerView();
 
         setMessages();
+
+
+        touchListener = new RecyclerTouchListener(this,recyclerView);
+        touchListener
+
+                .setSwipeOptionViews(R.id.delete)
+                .setSwipeable(R.id.rowFG, R.id.rowBG, new RecyclerTouchListener.OnSwipeOptionsClickListener() {
+                    @Override
+                    public void onSwipeOptionClicked(int viewID, int position) {
+                        switch (viewID){
+                            case R.id.delete:
+                                DialogShow(position);
+                                break;
+                        }
+                    }
+                });
     }
 
     private void setUpRecyclerView(){
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(itemDecor);
-        ItemTouchHelper itemTouchHelper = new
-                ItemTouchHelper(new SwipeToDeleteCallback(mAdapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
 
     private void setMessages() {
@@ -55,4 +74,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-}
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.addOnItemTouchListener(touchListener);
+    }
+
+    public void DialogShow(final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Delete")
+                .setMessage("Are you sure, you want to delete ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAdapter.deleteItem(position);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog dialog  = builder.create();
+        dialog.show();
+    }
+    }
+
